@@ -28,7 +28,8 @@ public class aerolinea {
             System.out.println("2. Vender tickets");
             System.out.println("3. Consultar ventas");
             System.out.println("4. Consultar clientes registrados");
-            System.out.println("5. Salir");
+            System.out.println("5. Ver tickets de un cliente");
+            System.out.println("6. Salir");
             int opcion = scanner.nextInt();
             scanner.nextLine();
 
@@ -46,6 +47,9 @@ public class aerolinea {
                     consultarClientesRegistrados();
                     break;
                 case 5:
+                    verTicketsCliente();
+                    break;
+                case 6:
                     continuar = false;
                     break;
                 default:
@@ -103,7 +107,7 @@ public class aerolinea {
 
         System.out.println("Ingrese el porcentaje de descuento (0-100):");
         double descuento = scanner.nextDouble();
-        scanner.nextLine(); // Limpiar el buffer de entrada
+        scanner.nextLine();
 
         comprarTicket(pasajero, cantidad, clase, descuento);
     }
@@ -132,6 +136,24 @@ public class aerolinea {
         }
     }
 
+    public void verTicketsCliente() {
+        System.out.println("Ingrese el nombre del pasajero:");
+        String nombrePasajero = scanner.nextLine();
+
+        Pasajero pasajero = buscarPasajero(nombrePasajero);
+        if (pasajero == null) {
+            System.out.println("Error: Pasajero no encontrado.");
+            return;
+        }
+
+        System.out.println("Tickets asociados al cliente " + pasajero.getNombre() + ":");
+        for (Map.Entry<String, Integer> entry : ventas.entrySet()) {
+            if (entry.getKey().equals(pasajero.getNombre())) {
+                System.out.println(entry.getValue() + " tickets");
+            }
+        }
+    }
+
     private Pasajero buscarPasajero(String nombre) {
         for (Pasajero pasajero : pasajerosRegistrados) {
             if (pasajero.getNombre().equalsIgnoreCase(nombre)) {
@@ -142,13 +164,12 @@ public class aerolinea {
     }
 
     private double obtenerPrecioClase(String clase) {
-        // Simplemente un ejemplo, aquí iría la lógica para obtener el precio de la clase
         if (clase.equalsIgnoreCase("Económica")) {
             return 100.0;
         } else if (clase.equalsIgnoreCase("Primera Clase")) {
             return 300.0;
         } else {
-            return 0.0; // En caso de clase no reconocida
+            return 0.0;
         }
     }
 }
@@ -173,7 +194,6 @@ class Pasajero {
         return nombre;
     }
 
-    // Otros getters y setters
 
     @Override
     public String toString() {
@@ -184,3 +204,4 @@ class Pasajero {
 enum Membresia {
     BRONCE, PLATA, ORO, PLATINO
 }
+
